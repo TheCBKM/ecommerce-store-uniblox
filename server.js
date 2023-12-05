@@ -1,5 +1,6 @@
 const express = require("express");
 var cors = require("cors");
+const shortid = require("shortid");
 
 const app = express();
 app.use(express.json()); // Middleware for parsing JSON bodies
@@ -16,7 +17,6 @@ let items = [
   { id: 1, name: "Item 1", price: 10 },
   { id: 2, name: "Item 2", price: 50 },
 ];
-
 let itemsPurchasedCount = 0; // Total number of items purchased
 let totalPurchaseAmount = 0; // Total amount from all purchases
 let discountAmount = 0; // Total discount amount given
@@ -55,6 +55,7 @@ app.post("/users/:userId/cart", (req, res) => {
   users[userId].cart.push(item);
   res.send(users[userId].cart); // Send the updated cart
 });
+
 // Route for user to checkout their cart
 app.post("/users/:userId/checkout", (req, res) => {
   const userId = req.params.userId; // Get user ID from URL
@@ -103,6 +104,46 @@ app.post("/users/:userId/checkout", (req, res) => {
   res.send({ checkedOutItems, price: finalPrice });
 });
 
+// Route to view a user's cart
+app.get("/users/:userId/cart", (req, res) => {
+  const userId = req.params.userId; // Get user ID from URL
+
+  // Check if user exists
+  if (!users[userId]) {
+    return res.status(404).send("User not found");
+  }
+
+  res.send(users[userId].cart); // Send user's cart
+});
+
+// Admin route to generate a discount code for a user
+app.get("/admin/generateCode/:userId/", (req, res) => {
+  const userId = req.params.userId; // Get user ID from URL
+
+  // Check if user exists
+  if (!users[userId]) {
+    return res.status(404).send("User not found");
+  }
+
+  // Check if user has coupons left to generate
+  if (users[userId].couponsLeft !== 0) {
+    const coupon = shortid.generate(); // Generate a unique coupon code
+    users[userId].coupons[coupon] = true; // Add coupon to user's coupons
+    users[userId].couponsLeft -= 1; // Decrement available coupons
+    discountList.push(coupon); // Add coupon to the global list
+    return res.send({ coupon }); // Send the generated coupon
+  } else return res.status(404).send("No Coupon left"); // No coupons left
+});
+
+// Admin route to get Application stats
+app.get("/admin/stats/", (req, res) => {
+  return res.status(200).send({
+    itemsPurchasedCount,
+    totalPurchaseAmount,
+    discountAmount,
+    discountList,
+  });
+});
 
 // Start the server
 app.listen(port, () => {
