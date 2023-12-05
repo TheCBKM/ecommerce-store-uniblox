@@ -8,3 +8,9 @@ services:
       - NODE_ENV=production
       - INTERVAL=production
     command: npm start
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
