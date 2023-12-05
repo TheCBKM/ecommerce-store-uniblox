@@ -39,6 +39,13 @@ git clone https://github.com/TheCBKM/ecommerce-store-uniblox
 
 ---
 
+## Configuration
+
+The application can be configured using the following environment variables:
+
+- `PORT`: The port number on which the server will listen. Defaults to `3000` if not specified.
+- `INTERVAL`: The interval for providing discount coupons to users. Defaults to `3` if not specified.
+
 ## API Endpoints
 
 ### User Management
@@ -112,3 +119,4 @@ To run the server, navigate to the project directory and execute:
 
 ```bash
 node app.js
+```
