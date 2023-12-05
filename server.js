@@ -8,7 +8,7 @@ app.use(cors()); // Enable CORS for all routes
 
 const port = 3000;
 
-const n = 3; // The interval for providing discount coupons
+const n = parseInt(process.env.INTERVAL) || 3; // The interval for providing discount coupons
 
 // In-memory store
 let users = {}; // Stores user data
