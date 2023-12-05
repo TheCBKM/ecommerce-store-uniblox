@@ -24,39 +24,87 @@ let discountList = []; // List of all discount coupons
 
 // Route to create a new user
 app.post("/users", (req, res) => {
-    const userId = Date.now().toString(); // Generate a unique user ID
-    // Initialize user data
-    users[userId] = { cart: [], checkoutCount: 0, coupons: {}, couponsLeft: 0 };
-    res.send({ userId: userId }); // Send back the new user ID
+  const userId = Date.now().toString(); // Generate a unique user ID
+  // Initialize user data
+  users[userId] = { cart: [], checkoutCount: 0, coupons: {}, couponsLeft: 0 };
+  res.send({ userId: userId }); // Send back the new user ID
+});
+
+// Route to get the list of all items
+app.get("/items", (req, res) => {
+  res.send({ items }); // Send the list of items
+});
+
+// Route to add an item to a user's cart
+app.post("/users/:userId/cart", (req, res) => {
+  const userId = req.params.userId; // Get user ID from URL
+  const itemId = req.body.itemId; // Get item ID from request body
+
+  // Check if user exists
+  if (!users[userId]) {
+    return res.status(404).send("User not found");
+  }
+
+  // Find the item by its ID
+  const item = items.find((i) => i.id === itemId);
+  if (!item) {
+    return res.status(404).send("Item not found");
+  }
+
+  // Add item to user's cart
+  users[userId].cart.push(item);
+  res.send(users[userId].cart); // Send the updated cart
+});
+// Route for user to checkout their cart
+app.post("/users/:userId/checkout", (req, res) => {
+  const userId = req.params.userId; // Get user ID from URL
+  const userCoupon = req.body?.coupon; // Get coupon code from request body, if any
+  let discount = 0; // Initialize discount
+
+  // Check if user exists
+  if (!users[userId]) {
+    return res.status(404).send("User not found");
+  }
+
+  // Check if cart is empty
+  if (users[userId].cart.length === 0) {
+    return res.status(404).send("Cart is Empty");
+  }
+
+  // Apply coupon if valid
+  if (userCoupon) {
+    if (users[userId].coupons[userCoupon]) {
+      discount = 10; // Set discount rate
+      users[userId].coupons[userCoupon] = false; // Mark coupon as used
+    } else return res.status(404).send("Coupon is invalid");
+  }
+  checkedOutItems = users[userId].cart;
+  // Calculate total price
+  let totalPrice = 0;
+  checkedOutItems.forEach((item) => {
+    totalPrice += item.price;
   });
-  
-  // Route to get the list of all items
-  app.get("/items", (req, res) => {
-    res.send({ items }); // Send the list of items
-  });
-  
-  // Route to add an item to a user's cart
-  app.post("/users/:userId/cart", (req, res) => {
-    const userId = req.params.userId; // Get user ID from URL
-    const itemId = req.body.itemId; // Get item ID from request body
-  
-    // Check if user exists
-    if (!users[userId]) {
-      return res.status(404).send("User not found");
-    }
-  
-    // Find the item by its ID
-    const item = items.find((i) => i.id === itemId);
-    if (!item) {
-      return res.status(404).send("Item not found");
-    }
-  
-    // Add item to user's cart
-    users[userId].cart.push(item);
-    res.send(users[userId].cart); // Send the updated cart
-  });
-  
-  // Start the server
+  let discountPrice = totalPrice * (discount / 100);
+  let finalPrice = totalPrice - discountPrice;
+
+  // Update various counts and clear the cart
+  users[userId].cart = [];
+  users[userId].checkoutCount += 1;
+  if (users[userId].checkoutCount % n === 0) {
+    users[userId].couponsLeft += 1; // Increment available coupons
+  }
+
+  // Update purchase stats
+  itemsPurchasedCount += checkedOutItems.length;
+  totalPurchaseAmount += finalPrice;
+  discountAmount += discountPrice;
+
+  // Send checkout details
+  res.send({ checkedOutItems, price: finalPrice });
+});
+
+
+// Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
