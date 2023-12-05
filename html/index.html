@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Express App API Test</title>
+</head>
+<body>
+    <h1>Express App API Test</h1>
+
+    <!-- User Creation -->
+    <button onclick="createUser()">Create User</button>
+    <div id="createUserResult"></div>
+
+    <!-- View All Items -->
+    <button onclick="viewItems()">View All Items</button>
+    <div id="viewItemsResult"></div>
+
+    <!-- Add Item to Cart -->
+    <input type="text" id="userIdForCart" placeholder="Enter User ID">
+    <input type="number" id="itemIdForCart" placeholder="Enter Item ID">
+    <button onclick="addItemToCart()">Add Item to Cart</button>
+    <div id="addItemToCartResult"></div>
+
+    <!-- Checkout Cart Items -->
+    <input type="text" id="userIdForCheckout" placeholder="Enter User ID">
+    <input type="text" id="couponForCheckout" placeholder="Enter Coupon (optional)">
+    <button onclick="checkoutCart()">Checkout Cart</button>
+    <div id="checkoutCartResult"></div>
+
+    <!-- View User Cart -->
+    <input type="text" id="userIdForViewCart" placeholder="Enter User ID">
+    <button onclick="viewCart()">View Cart</button>
+    <div id="viewCartResult"></div>
+
+    <!-- Generate Discount Code -->
+    <input type="text" id="userIdForCode" placeholder="Enter User ID">
+    <button onclick="generateCode()">Generate Discount Code</button>
+    <div id="generateCodeResult"></div>
+
+    <script>
+        const serverUrl = 'http://localhost:3000';
+
+        // Function to create user
+        async function createUser() {
+            const response = await fetch(`${serverUrl}/users`, { method: 'POST' });
+            const data = await response.json();
+            document.getElementById('createUserResult').innerText = JSON.stringify(data);
+        }
+
+        // Function to view all items
+        async function viewItems() {
+            const response = await fetch(`${serverUrl}/items`);
+            const data = await response.json();
+            document.getElementById('viewItemsResult').innerText = JSON.stringify(data);
+        }
+
+        // Function to add item to cart
+        async function addItemToCart() {
+            const userId = document.getElementById('userIdForCart').value;
+            const itemId = document.getElementById('itemIdForCart').value;
+            const response = await fetch(`${serverUrl}/users/${userId}/cart`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ itemId: Number(itemId) })
+            });
+            const data = await response.json();
+            document.getElementById('addItemToCartResult').innerText = JSON.stringify(data);
+        }
+
+        // Function to checkout cart
+        async function checkoutCart() {
+            const userId = document.getElementById('userIdForCheckout').value;
+            const coupon = document.getElementById('couponForCheckout').value;
+            const response = await fetch(`${serverUrl}/users/${userId}/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ coupon })
+            });
+            const data = await response.json();
+            document.getElementById('checkoutCartResult').innerText = JSON.stringify(data);
+        }
+
+        // Function to view user cart
+        async function viewCart() {
+            const userId = document.getElementById('userIdForViewCart').value;
+            const response = await fetch(`${serverUrl}/users/${userId}/cart`);
+            const data = await response.json();
+            document.getElementById('viewCartResult').innerText = JSON.stringify(data);
+        }
+
+        // Function to generate discount code
+        async function generateCode() {
+            const userId = document.getElementById('userIdForCode').value;
+            const response = await fetch(`${serverUrl}/admin/generateCode/${userId}`);
+            const data = await response.json();
+            document.getElementById('generateCodeResult').innerText = JSON.stringify(data);
+        }
+    </script>
+</body>
+</html>
