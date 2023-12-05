@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json()); // Middleware for parsing JSON bodies
 app.use(cors()); // Enable CORS for all routes
 
-const port = 3000;
+const port = parseInt(process.env.PORT) || 3000;
 
 const n = parseInt(process.env.INTERVAL) || 3; // The interval for providing discount coupons
 

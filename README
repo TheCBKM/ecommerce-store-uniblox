@@ -1,0 +1,33 @@
+# Ecommerce-Store
+
+This is a simple Express.js application demonstrating basic API functionalities including user management, item viewing, and a cart system with discount code generation.
+
+## Features
+
+- User registration and management.
+- View a list of items.
+- Add items to a shopping cart.
+- Checkout functionality with cart clearing.
+- Discount code generation and application.
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+What things you need to install the software and how to install them:
+
+- [Node.js](https://nodejs.org/)
+- [Docker](https://www.docker.com/) (optional)
+
+### Installing
+
+A step-by-step series of examples that tell you how to get a development environment running:
+
+ Clone the repository
+   ```bash
+   git clone https://github.com/TheCBKM/ecommerce-store-uniblox
+   ````
+#### Using NPM
+1.  `cd your-project-directory`

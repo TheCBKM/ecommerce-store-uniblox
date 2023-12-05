@@ -3,39 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <title>Express App API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input[type=text], input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e7e7e7;
+            border: 1px solid #dcdcdc;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Express App API Test</h1>
+    <div class="container">
+        <h1>Express App API Test</h1>
 
-    <!-- User Creation -->
-    <button onclick="createUser()">Create User</button>
-    <div id="createUserResult"></div>
+        <!-- User Creation -->
+        <button onclick="createUser()">Create User</button>
+        <div id="createUserResult" class="result"></div>
 
-    <!-- View All Items -->
-    <button onclick="viewItems()">View All Items</button>
-    <div id="viewItemsResult"></div>
+        <!-- View All Items -->
+        <button onclick="viewItems()">View All Items</button>
+        <div id="viewItemsResult" class="result"></div>
 
-    <!-- Add Item to Cart -->
-    <input type="text" id="userIdForCart" placeholder="Enter User ID">
-    <input type="number" id="itemIdForCart" placeholder="Enter Item ID">
-    <button onclick="addItemToCart()">Add Item to Cart</button>
-    <div id="addItemToCartResult"></div>
+        <!-- Add Item to Cart -->
+        <input type="text" id="userIdForCart" placeholder="Enter User ID">
+        <input type="number" id="itemIdForCart" placeholder="Enter Item ID">
+        <button onclick="addItemToCart()">Add Item to Cart</button>
+        <div id="addItemToCartResult" class="result"></div>
 
-    <!-- Checkout Cart Items -->
-    <input type="text" id="userIdForCheckout" placeholder="Enter User ID">
-    <input type="text" id="couponForCheckout" placeholder="Enter Coupon (optional)">
-    <button onclick="checkoutCart()">Checkout Cart</button>
-    <div id="checkoutCartResult"></div>
+        <!-- Checkout Cart Items -->
+        <input type="text" id="userIdForCheckout" placeholder="Enter User ID">
+        <input type="text" id="couponForCheckout" placeholder="Enter Coupon (optional)">
+        <button onclick="checkoutCart()">Checkout Cart</button>
+        <div id="checkoutCartResult" class="result"></div>
 
-    <!-- View User Cart -->
-    <input type="text" id="userIdForViewCart" placeholder="Enter User ID">
-    <button onclick="viewCart()">View Cart</button>
-    <div id="viewCartResult"></div>
+        <!-- View User Cart -->
+        <input type="text" id="userIdForViewCart" placeholder="Enter User ID">
+        <button onclick="viewCart()">View Cart</button>
+        <div id="viewCartResult" class="result"></div>
 
-    <!-- Generate Discount Code -->
-    <input type="text" id="userIdForCode" placeholder="Enter User ID">
-    <button onclick="generateCode()">Generate Discount Code</button>
-    <div id="generateCodeResult"></div>
+        <!-- Generate Discount Code -->
+        <input type="text" id="userIdForCode" placeholder="Enter User ID">
+        <button onclick="generateCode()">Generate Discount Code</button>
+        <div id="generateCodeResult" class="result"></div>
+    </div>
+
+    <script>
 
     <script>
         const serverUrl = 'http://localhost:3000';
